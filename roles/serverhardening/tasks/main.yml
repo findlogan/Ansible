@@ -1,0 +1,33 @@
+---
+- name: "Get remote username"
+  ansible.builtin.command: whoami
+  register: ansible_remote_user
+  changed_when: false
+
+- name: "Copy the user's SSH public key to the remote machine"
+  ansible.builtin.copy:
+    src: "~/.ssh/id_rsa.pub"
+    dest: "/{{ ansible_remote_user.stdout }}/.ssh/authorized_keys"
+    owner: "{{ ansible_remote_user.stdout }}"
+    group: "{{ ansible_remote_user.stdout }}"
+    mode: '0600'
+
+- name: "Copy the SSH configuration file to the remote machine"
+  ansible.builtin.copy:
+    src: "ansible-ssh-config.cfg"
+    dest: "/etc/ssh/sshd_config.d/ansible-ssh-config.cfg"
+    owner: root
+    group: root
+    mode: '0600'
+  notify: Restart SSH
+
+- name: "Ensure /etc/ssh/sshd_config/50-cloud-init.conf is deleted (Commonly is included )"
+  ansible.builtin.file:
+    path: "/etc/ssh/sshd_config.d/50-cloud-init.conf"
+    state: absent
+
+- name: "Setup fail2ban with default configuration"
+  ansible.builtin.apt:
+    name: fail2ban
+    state: present
+  notify: Restart fail2ban

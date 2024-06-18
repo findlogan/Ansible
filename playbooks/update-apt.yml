@@ -5,11 +5,11 @@
 
   tasks:
     - name: Update apt cache
-      apt:
-        update_cache: yes
+      ansible.builtin.apt:
+        update_cache: true
 
     - name: Upgrade packages
-      apt:
-        upgrade: yes
-        autoremove: yes
-        autoclean: yes
+      ansible.builtin.apt:
+        upgrade: true
+        autoremove: true
+        autoclean: true
