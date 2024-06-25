@@ -13,3 +13,5 @@ Included below will be a documented list of what all is currently included insid
 > Note: Currently all of these scripts will run on all hosts in the inventory reguardless of grouping.
 
 `/playbooks/harden-server.yml` - This playbook will disable password login, copy a basic config for SSH, remove some defaults, and only allow SSH key authentication. This assumes you are using your ansible user's SSH keys.
+
+`/playbooks/install-fabric.yml` - Very simple install script for apt to install [fabric](https://github.com/danielmiessler/fabric/tree/main). Run `fabric --setup` on your machine after to setup your API keys. This will require Google API keys for youtube, as well as any other API keys for your favorite AI platform. (They support local AI as well)

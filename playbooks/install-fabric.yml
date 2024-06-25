@@ -1,0 +1,19 @@
+---
+- name: Install Fabric
+  hosts: all
+  become: false
+
+  tasks:
+    - name: Install pipx
+      ansible.builtin.apt:
+        name: pipx
+
+    - name: Clone Fabric repository
+      ansible.builtin.git:
+        repo: https://github.com/danielmiessler/fabric.git
+        dest: ~/fabric
+
+    - name: Install Fabric using pipx
+      ansible.builtin.command:
+        cmd: pipx install .
+        chdir: ~/fabric
